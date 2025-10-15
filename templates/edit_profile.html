@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>Edit Profile</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            <label for="profile_picture" class="form-label">Profile Picture</label>
+            {{ form.profile_picture(class="form-control") }}
+            {% if form.profile_picture.errors %}
+                {% for error in form.profile_picture.errors %}
+                    <span class="text-danger">{{ error }}</span><br>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+</div>
+{% endblock %}

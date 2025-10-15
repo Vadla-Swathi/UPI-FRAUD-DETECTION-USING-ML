@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="background-image: url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=2232'); background-size: cover; background-position: center; min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 text-center">
+            <div class="mb-4">
+                <i class="fas fa-exclamation-triangle fa-5x text-warning"></i>
+            </div>
+            
+            <h1 class="mb-4 text-white">{{ title }}</h1>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p class="lead">{{ error_message or "Sorry, an error occurred while processing your request." }}</p>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="fas fa-home me-2"></i> Back to Home
+                </a>
+                
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('user.dashboard') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-tachometer-alt me-2"></i> Go to Dashboard
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

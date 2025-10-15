@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}My Alerts - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bell me-2"></i>My Alerts
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for alert in alerts %}
+                        <div class="list-group-item list-group-item-action {% if not alert.is_read %}list-group-item-warning{% endif %}">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">
+                                    <i class="fas fa-{% if alert.priority == 'high' %}exclamation-triangle{% elif alert.priority == 'medium' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+                                    {{ alert.message }}
+                                </h6>
+                                <small>{{ alert.timestamp.strftime('%d %b %Y %H:%M') }}</small>
+                            </div>
+                            <p class="mb-1">{{ alert.alert_type }}</p>
+                            <small>Priority: 
+                                <span class="badge bg-{% if alert.priority == 'high' %}danger{% elif alert.priority == 'medium' %}warning{% else %}info{% endif %}">
+                                    {{ alert.priority|capitalize }}
+                                </span>
+                            </small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('user.dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

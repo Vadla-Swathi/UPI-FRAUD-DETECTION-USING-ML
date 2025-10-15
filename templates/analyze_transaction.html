@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Analyze Transaction - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="page-container" style="background-image: url('https://images.unsplash.com/photo-1556742031-c6961e8560b0?auto=format&fit=crop&q=80&w=2232');">
+    <div class="container py-4">
+        <!-- Page Header with Icon -->
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="mb-3 text-white" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
+                    <i class="fas fa-search-dollar me-2"></i>Enter Transaction Details to Check for Potential Fraud
+                </h1>
+                <p class="text-light" style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">
+                    <i class="fas fa-info-circle me-1"></i>Submit the details below to analyze the transaction for potential fraud risks.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Form Section -->
+            <div class="col-md-6 mb-4">
+                <div class="card" style="background-color: rgba(255, 255, 255, 0.9);">
+                    <div class="card-header bg-gradient-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-credit-card me-2"></i>Transaction Details
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('user.analyze_transaction') }}">
+                            {{ form.hidden_tag() }}
+                            
+                            <!-- Amount Field with Icon -->
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-rupee-sign me-1"></i>{{ form.amount.label.text }}
+                                </label>
+                                {{ form.amount(class="form-control", placeholder="Enter Amount") }}
+                                {% for error in form.amount.errors %}
+                                    <div class="invalid-feedback d-block text-danger">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Recipient UPI Field with Icon -->
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user-tag me-1"></i>{{ form.recipient_upi.label.text }}
+                                </label>
+                                {{ form.recipient_upi(class="form-control", placeholder="Enter Recipient UPI (e.g., user@bank)") }}
+                                {% for error in form.recipient_upi.errors %}
+                                    <div class="invalid-feedback d-block text-danger">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Sender UPI Field with Icon -->
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user me-1"></i>{{ form.sender_upi.label.text }} 
+                                </label>
+                                {{ form.sender_upi(class="form-control", placeholder="Enter Sender UPI") }}
+                                {% for error in form.sender_upi.errors %}
+                                    <div class="invalid-feedback d-block text-danger">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Description Field with Icon -->
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-align-left me-1"></i>{{ form.description.label.text }} (optional)
+                                </label>
+                                {{ form.description(class="form-control", placeholder="Enter Description (Optional)", rows=3) }}
+                                {% for error in form.description.errors %}
+                                    <div class="invalid-feedback d-block text-danger">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Submit Button with Icon -->
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>Analyze Transaction
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works Section -->
+            <div class="col-md-6 mb-4">
+                <div class="card" style="background-color: rgba(255, 255, 255, 0.9);">
+                    <div class="card-header bg-gradient-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-question-circle me-2"></i>How It Works
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="Fraud Detection" class="img-fluid" style="max-height: 150px;">
+                        </div>
+                        <p>Our advanced fraud detection system analyzes your transaction details using machine learning to identify potential risks. Here's what we check:</p>
+                        <ul class="fa-ul">
+                            <li class="mb-2">
+                                <span class="fa-li"><i class="fas fa-chart-line text-primary"></i></span>
+                                <strong>Transaction Patterns:</strong> Unusual amounts or frequencies
+                            </li>
+                            <li class="mb-2">
+                                <span class="fa-li"><i class="fas fa-check-circle text-success"></i></span>
+                                <strong>Recipient Verification:</strong> History and validity of UPI ID
+                            </li>
+                            <li class="mb-2">
+                                <span class="fa-li"><i class="fas fa-clock text-warning"></i></span>
+                                <strong>Behavioral Analysis:</strong> Time and location anomalies
+                            </li>
+                            <li class="mb-2">
+                                <span class="fa-li"><i class="fas fa-shield-alt text-info"></i></span>
+                                <strong>Security Metrics:</strong> Device and connection safety
+                            </li>
+                        </ul>
+                        <div class="alert alert-info mt-4">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            <strong>Note:</strong> A unique Transaction ID will be automatically generated for your transaction.
+                        </div>
+                        <div class="text-center mt-3">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2451/2451981.png" alt="Secure Transaction" class="img-fluid" style="max-height: 100px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Font Awesome for icons -->
+<script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+{% endblock %}

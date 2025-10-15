@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}User Management - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="background-image: url('https://images.unsplash.com/photo-1563986768494-4dee9a732b3a?auto=format&fit=crop&q=80&w=2232'); background-size: cover; background-position: center; min-height: 100vh;">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="mb-3 text-white">User Management</h1>
+            <p class="text-light">Manage all system users</p>
+        </div>
+        <div class="col-auto">
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('admin_users') }}" class="row g-3">
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Search</label>
+                    <input type="text" class="form-control" id="search" name="search" placeholder="Username or email" value="{{ request.args.get('search', '') }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="sort_by" class="form-label">Sort By</label>
+                    <select class="form-select" id="sort_by" name="sort_by">
+                        <option value="registered_on" {% if request.args.get('sort_by') == 'registered_on' %}selected{% endif %}>Registration Date</option>
+                        <option value="username" {% if request.args.get('sort_by') == 'username' %}selected{% endif %}>Username</option>
+                        <option value="email" {% if request.args.get('sort_by') == 'email' %}selected{% endif %}>Email</option>
+                        <option value="last_login" {% if request.args.get('sort_by') == 'last_login' %}selected{% endif %}>Last Login</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="sort_order" class="form-label">Order</label>
+                    <select class="form-select" id="sort_order" name="sort_order">
+                        <option value="desc" {% if request.args.get('sort_order') == 'desc' %}selected{% endif %}>Descending</option>
+                        <option value="asc" {% if request.args.get('sort_order') == 'asc' %}selected{% endif %}>Ascending</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="fas fa-search me-1"></i> Apply
+                    </button>
+                    <a href="{{ url_for('admin_users') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-undo me-1"></i> Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Table -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Registered On</th>
+                            <th>Last Login</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.registered_on.strftime('%d %b, %Y') }}</td>
+                            <td>{{ user.last_login.strftime('%d %b, %Y %H:%M') if user.last_login else 'Never' }}</td>
+                            <td>
+                                {% if user.is_verified %}
+                                    <span class="badge bg-success">Verified</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('admin_user_details', user_id=user.id) }}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ url_for('admin_user_edit', user_id=user.id) }}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ user.id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteModal-{{ user.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel">Confirm User Deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete user <strong>{{ user.username }}</strong>?</p>
+                                                <p class="text-danger">This action cannot be undone and will delete all associated transactions and data.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{ url_for('admin_user_delete', user_id=user.id) }}" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-danger">Delete User</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            {% if total_pages > 1 %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-4">
+                    <li class="page-item {{ 'disabled' if current_page == 1 else '' }}">
+                        <a class="page-link" href="{{ url_for('admin_users', page=current_page-1, search=request.args.get('search', ''), sort_by=request.args.get('sort_by', 'registered_on'), sort_order=request.args.get('sort_order', 'desc')) }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    
+                    {% for page_num in range(1, total_pages + 1) %}
+                    <li class="page-item {{ 'active' if page_num == current_page else '' }}">
+                        <a class="page-link" href="{{ url_for('admin_users', page=page_num, search=request.args.get('search', ''), sort_by=request.args.get('sort_by', 'registered_on'), sort_order=request.args.get('sort_order', 'desc')) }}">{{ page_num }}</a>
+                    </li>
+                    {% endfor %}
+                    
+                    <li class="page-item {{ 'disabled' if current_page == total_pages else '' }}">
+                        <a class="page-link" href="{{ url_for('admin_users', page=current_page+1, search=request.args.get('search', ''), sort_by=request.args.get('sort_by', 'registered_on'), sort_order=request.args.get('sort_order', 'desc')) }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card" style="background-color: rgba(255, 255, 255, 0.95);">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h5 class="card-title mb-0">Admin Login</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control", placeholder="Enter your admin email") }}
+                            {% if form.email.errors %}
+                                {% for error in form.email.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control", placeholder="Enter your admin password") }}
+                            {% if form.password.errors %}
+                                {% for error in form.password.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="d-grid mb-3">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                        <div class="text-center">
+                            <a href="{{ url_for('auth.admin_forgot_password') }}">Forgot Password?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center mt-3" style="color: white;">
+                <p>Not an admin? <a href="{{ url_for('auth.login') }}" style="color: #ffffff; text-decoration: underline;">User Login</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

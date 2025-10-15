@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}UPI Fraud Shield - Secure Your Transactions{% endblock %}
+
+{% block content %}
+<div class="auth-container" style="background-image: url('https://images.unsplash.com/photo-1563986768494-4dee9a732b3a?auto=format&fit=crop&q=80&w=2232');">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card text-center py-5 px-4 auth-card">
+                    <div class="card-body">
+                        <h1 class="display-5 mb-4 fw-bold text-gradient">UPI Fraud Shield</h1>
+                        <p class="lead mb-4">Protecting your UPI transactions with advanced fraud detection powered by machine learning technology</p>
+                        
+                        <div class="row justify-content-center mb-5">
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-around">
+                                    <div class="text-center mb-4">
+                                        <div class="mb-3">
+                                            <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                                        </div>
+                                        <h5>Secure Transactions</h5>
+                                    </div>
+                                    <div class="text-center mb-4">
+                                        <div class="mb-3">
+                                            <i class="fas fa-robot fa-3x text-primary"></i>
+                                        </div>
+                                        <h5>AI Powered</h5>
+                                    </div>
+                                    <div class="text-center mb-4">
+                                        <div class="mb-3">
+                                            <i class="fas fa-tachometer-alt fa-3x text-primary"></i>
+                                        </div>
+                                        <h5>Real-time Analysis</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if current_user.is_authenticated %}
+                            <div class="d-grid gap-2 col-md-6 mx-auto">
+                                <a href="{{ url_for('transactions.dashboard') }}" class="btn btn-primary btn-lg px-4 mb-3">
+                                    <i class="fas fa-tachometer-alt me-2"></i> Go to Dashboard
+                                </a>
+                                {% if isinstance(current_user, get_model('Admin')) %}
+                                        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-warning btn-lg px-4 mb-3">
+                                            <i class="fas fa-user-shield me-2"></i> Admin Dashboard
+                                        </a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="d-grid gap-2 col-md-6 mx-auto">
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg px-4 mb-3">
+                                    <i class="fas fa-sign-in-alt me-2"></i> User Login
+                                </a>
+                                <a href="{{ url_for('auth.admin_login') }}" class="btn btn-warning btn-lg px-4 mb-3">
+                                    <i class="fas fa-user-shield me-2"></i> Admin Login
+                                </a>
+                                <a href="{{ url_for('auth.signup') }}" class="btn btn-outline-light btn-lg px-4">
+                                    <i class="fas fa-user-plus me-2"></i> Sign Up
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block scripts %}
+<script>
+    // Helper function to get model (since Jinja can't import directly)
+    function get_model(model_name) {
+        return window[model_name] || null;
+    }
+</script>
++{% endblock %}
+{% endblock %}

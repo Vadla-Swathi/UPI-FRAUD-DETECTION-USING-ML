@@ -1,0 +1,400 @@
+/* Custom CSS for UPI Fraud Detection App */
+
+/* Theme Variables */
+:root {
+  --primary-color: #6a64f1;
+  --secondary-color: #5e3fd7;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --success-color: #28a745;
+  --info-color: #17a2b8;
+  --dark-color: #343a40;
+  --light-color: #f8f9fa;
+  --gray-color: #6c757d;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Global Styles */
+html, body {
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #222;
+}
+
+/* Background Styles */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.bg-gradient-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+}
+
+/* Dashboard Header Styles */
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff6f61, #ffb347, #5eead4, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.dashboard-header p {
+  color: #555;
+  font-size: 1.1rem;
+}
+
+/* Stats Cards Styles */
+.stats-card {
+  background: linear-gradient(135deg, #ff6f61, #ffb347);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 15px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stats-card:nth-child(2) {
+  background: linear-gradient(135deg, #a78bfa, #5eead4);
+}
+
+.stats-card:nth-child(3) {
+  background: linear-gradient(135deg, #5eead4, #ff6f61);
+}
+
+.stats-card:nth-child(4) {
+  background: linear-gradient(135deg, #ffb347, #a78bfa);
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.stats-icon i {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.stats-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.stats-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.stats-value .badge {
+  font-size: 0.9rem;
+}
+
+/* Card Styles */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 4px 15px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.card-header {
+  border-radius: 12px 12px 0 0 !important;
+  font-weight: 600;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Transaction Filters Styles */
+.transaction-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px var(--shadow-color);
+}
+
+.search-container,
+.risk-filter-container,
+.date-filter-container {
+  flex: 1;
+  min-width: 200px;
+}
+
+#transaction-search,
+#risk-filter,
+#date-filter {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--dark-color);
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#transaction-search {
+  border-color: #ff6f61;
+}
+
+#risk-filter {
+  border-color: #a78bfa;
+}
+
+#date-filter {
+  border-color: #5eead4;
+}
+
+#transaction-search:focus,
+#risk-filter:focus,
+#date-filter:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(106, 64, 241, 0.3);
+  border-color: var(--primary-color);
+}
+
+#transaction-search::placeholder {
+  color: var(--gray-color);
+  opacity: 0.7;
+}
+
+/* Admin Dashboard Specific Styles */
+.admin-dashboard .card-header {
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.admin-dashboard .card-header.alerts-header {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+}
+
+.admin-dashboard .card-header.flagged-header {
+  background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+}
+
+.admin-dashboard .card-header .card-title {
+  margin-bottom: 0;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.admin-dashboard .card-header .card-title i {
+  margin-right: 10px;
+  font-size: 1rem;
+}
+
+.admin-dashboard .card {
+  margin-bottom: 2rem;
+  border: none;
+}
+
+.admin-dashboard .card-body {
+  padding: 1.5rem;
+}
+
+.admin-dashboard .table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.admin-dashboard .table td {
+  vertical-align: middle;
+}
+
+.admin-dashboard .flagged-transactions-table tbody tr.risk-high {
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+.admin-dashboard .flagged-transactions-table tbody tr.risk-medium {
+  background-color: rgba(255, 193, 7, 0.05);
+}
+
+.admin-dashboard .flagged-transactions-table tbody tr.risk-low {
+  background-color: rgba(40, 167, 69, 0.05);
+}
+
+.admin-dashboard .admin-actions .btn {
+  margin-right: 5px;
+}
+
+.admin-dashboard .flagged-empty-state,
+.admin-dashboard .alerts-empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+.admin-dashboard .flagged-empty-state i,
+.admin-dashboard .alerts-empty-state i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.admin-dashboard .flagged-pagination,
+.admin-dashboard .alerts-pagination {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-dashboard .pagination .page-link {
+  color: var(--primary-color);
+  border-radius: 4px;
+  margin: 0 3px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-dashboard .pagination .page-link:hover {
+  background-color: rgba(106, 64, 241, 0.1);
+}
+
+.admin-dashboard .pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+/* Risk Distribution Chart */
+.risk-distribution-card {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.risk-distribution-header {
+  padding: 1rem 1.5rem;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.risk-distribution-body {
+  padding: 1.5rem;
+}
+
+/* Chart Container */
+.chart-container {
+  position: relative;
+  height: 400px;
+  margin-bottom: 2rem;
+}
+
+.doughnut-chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  margin: 0 auto;
+}
+
+#riskDistributionChart {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Doughnut Chart Legend */
+.doughnut-chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.doughnut-legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--dark-color);
+}
+
+.doughnut-legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.legend-color-low {
+  background-color: rgba(75, 192, 192, 0.7);
+}
+
+.legend-color-medium {
+  background-color: rgba(255, 206, 86, 0.7);
+}
+
+.legend-color-high {
+  background-color: rgba(255, 99, 132, 0.7);
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+  .doughnut-chart-wrapper {
+    height: 250px;
+  }
+
+  .transaction-filters {
+    flex-direction: column;
+  }
+
+  .search-container,
+  .risk-filter-container,
+  .date-filter-container {
+    width: 100%;
+  }
+}
+
+/* Loading Spinner Animation */
+.fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Modal Input Styling */
+.form-control-plaintext {
+  color: var(--dark-color);
+  padding: 0.375rem 0.75rem;
+  background-color: var(--light-color);
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+
+.form-label.fw-bold {
+  margin-bottom: 0.25rem;
+}

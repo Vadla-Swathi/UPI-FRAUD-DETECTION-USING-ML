@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Transaction History - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="page-container" style="background: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=2286') no-repeat center center fixed; background-size: cover; min-height: 100vh;">
+    <div class="container py-4" style="background-color: rgba(255, 255, 255, 0.9); padding: 2rem; border-radius: 0.5rem;">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="mb-3 text-gradient">Transaction History</h1>
+                <p class="text-muted">
+                    View all your analyzed transactions
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{{ url_for('transactions.analyze_transaction') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i> Analyze New Transaction
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white">
+                <h5 class="card-title mb-0">Transaction Records</h5>
+            </div>
+            <div class="card-body">
+                <div class="transaction-filters mb-3">
+                    <input type="text" id="transaction-search" class="form-control w-auto" placeholder="Search transactions...">
+                    <select id="risk-filter" class="form-select w-auto">
+                        <option value="all">All Risk Levels</option>
+                        <option value="Low">Low Risk</option>
+                        <option value="Medium">Medium Risk</option>
+                        <option value="High">High Risk</option>
+                    </select>
+                    <select id="date-filter" class="form-select w-auto">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">Last 7 Days</option>
+                        <option value="month">Last 30 Days</option>
+                    </select>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover" id="transactionHistoryTable">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Amount</th>
+                                <th>Recipient</th>
+                                <th>Risk Level</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions.items %}
+                                <tr>
+                                    <td>{{ transaction.transaction_id }}</td>
+                                    <td>₹{{ transaction.amount|round(2) }}</td>
+                                    <td>{{ transaction.recipient_upi }}</td>
+                                    <td>
+                                        {% if transaction.risk_level == 'High' %}
+                                            <span class="badge bg-danger">High</span>
+                                        {% elif transaction.risk_level == 'Medium' %}
+                                            <span class="badge bg-warning">Medium</span>
+                                        {% else %}
+                                            <span class="badge bg-success">Low</span>
+                                        {% endif %}
+                                    </td>
+                                    <td data-timestamp="{{ transaction.timestamp.isoformat() }}">{{ transaction.timestamp.strftime('%d %b %Y, %H:%M') }}</td>
+                                    <td>
+                                        {% if transaction.status == 'completed' %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% elif transaction.status == 'pending' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Failed</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('user.view_transaction', transaction_id=transaction.transaction_id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye me-1"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Transaction pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if transactions.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('transactions.transaction_history', page=transactions.prev_num) }}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                        {% endif %}
+                        
+                        {% for page_num in transactions.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                            {% if page_num %}
+                                {% if transactions.page == page_num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_num }}</span>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('transactions.transaction_history', page=page_num) }}">{{ page_num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if transactions.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('transactions.transaction_history', page=transactions.next_num) }}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Next</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

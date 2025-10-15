@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}User Details - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="mb-3">User Details</h1>
+            <p class="text-muted">View detailed information for user {{ user.username }}</p>
+        </div>
+        <div class="col-auto">
+            <a href="{{ url_for('admin_users') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Back to Users
+            </a>
+            <a href="{{ url_for('admin_user_edit', user_id=user.id) }}" class="btn btn-warning">
+                <i class="fas fa-edit me-2"></i> Edit User
+            </a>
+        </div>
+    </div>
+
+    <!-- User Profile Card -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">User Profile</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-circle mx-auto mb-3">
+                            <span class="avatar-initials">{{ user.username[0]|upper }}</span>
+                        </div>
+                        <h4 class="mb-0">{{ user.username }}</h4>
+                        <p class="text-muted">{{ user.email }}</p>
+                        <span class="badge bg-{{ user.is_verified and 'success' or 'warning' }}">
+                            {{ user.is_verified and 'Verified' or 'Pending Verification' }}
+                        </span>
+                    </div>
+                    
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>User ID</span>
+                            <span class="text-primary">{{ user.id }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Registered On</span>
+                            <span>{{ user.registered_on.strftime('%d %b, %Y %H:%M') }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Last Login</span>
+                            <span>{{ user.last_login.strftime('%d %b, %Y %H:%M') if user.last_login else 'Never' }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Security Question</span>
+                            <span>{{ user.security_question }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+                        <i class="fas fa-trash me-2"></i> Delete User
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <!-- User Statistics -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">User Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h2 class="fw-bold text-primary">{{ user_stats.total_transactions }}</h2>
+                                <p class="text-muted mb-0">Total Transactions</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h2 class="fw-bold text-success">₹{{ user_stats.total_amount }}</h2>
+                                <p class="text-muted mb-0">Total Amount</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h2 class="fw-bold text-danger">{{ user_stats.flagged_transactions }}</h2>
+                                <p class="text-muted mb-0">Flagged Transactions</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h2 class="fw-bold text-info">{{ user_stats.avg_fraud_probability }}%</h2>
+                                <p class="text-muted mb-0">Avg. Risk Score</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Transaction History -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Recent Transactions</h5>
+                        <a href="{{ url_for('admin_transactions', user_id=user.id) }}" class="btn btn-sm btn-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if recent_transactions %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Recipient</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Risk</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tx in recent_transactions %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url_for('admin_transaction_details', transaction_id=tx.transaction_id) }}">
+                                            {{ tx.transaction_id[:8] }}...
+                                        </a>
+                                    </td>
+                                    <td>{{ tx.timestamp.strftime('%d %b, %Y') }}</td>
+                                    <td>₹{{ tx.amount }}</td>
+                                    <td>{{ tx.recipient_upi }}</td>
+                                    <td>{{ tx.transaction_type }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ tx.status == 'completed' and 'success' or (tx.status == 'pending' and 'warning' or 'danger') }}">
+                                            {{ tx.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if tx.fraud_probability >= 0.7 %}
+                                            <span class="badge bg-danger">High</span>
+                                        {% elif tx.fraud_probability >= 0.3 %}
+                                            <span class="badge bg-warning">Medium</span>
+                                        {% else %}
+                                            <span class="badge bg-success">Low</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-info-circle me-2"></i> No transactions found for this user.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete User Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Confirm User Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete user <strong>{{ user.username }}</strong>?</p>
+                <p class="text-danger">This action cannot be undone and will delete all associated transactions and data.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ url_for('admin_user_delete', user_id=user.id) }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Delete User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        background-color: var(--bs-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .avatar-initials {
+        color: white;
+        font-size: 42px;
+    }
+</style>
+{% endblock %}

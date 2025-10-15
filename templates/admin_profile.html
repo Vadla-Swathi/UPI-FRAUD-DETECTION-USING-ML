@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Admin Profile - UPI Fraud Shield{% endblock %}
+{% block content %}
+<div class="container py-4" style="background-image: url('https://images.unsplash.com/photo-1556742031-c6961e8560b0?auto=format&fit=crop&q=80&w=2232'); background-size: cover; background-position: center; min-height: 100vh;">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="mb-3 text-white">Admin Profile</h1>
+            <p class="text-light">Manage your admin account details</p>
+        </div>
+        <div class="col-auto">
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left me-2"></i> Back to Admin Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-lg">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-user-shield me-2"></i>Admin Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Username</label>
+                        <div class="text-muted">{{ admin.username }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <div class="text-muted">{{ admin.email }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Admin Status</label>
+                        <div>
+                            <span class="badge bg-{% if admin.is_super_admin %}success{% else %}info{% endif %}">
+                                {{ 'Super Admin' if admin.is_super_admin else 'Admin' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Created By</label>
+                        <div class="text-muted">
+                            {% if admin.created_by %}
+                                {{ admin.created_by_user.username if admin.created_by_user else 'N/A' }}
+                            {% else %}
+                                System
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Can View Sensitive Data</label>
+                        <div>
+                            <span class="badge bg-{% if admin.can_view_sensitive_data %}success{% else %}danger{% endif %}">
+                                {{ 'Yes' if admin.can_view_sensitive_data else 'No' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Security Question</label>
+                        <div class="text-muted">{{ admin.security_question or 'Not set' }}</div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a href="{{ url_for('auth.change_password') }}" class="btn btn-primary">
+                        <i class="fas fa-lock me-2"></i> Change Password
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

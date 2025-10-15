@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card profile-card">
+                <div class="card-header bg-gradient-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-user-circle me-2"></i>User Profile
+                        </h5>
+                        <div class="btn-group">
+                            <a href="{{ url_for('auth.edit_profile') }}" class="btn btn-light btn-sm">
+                                <i class="fas fa-edit me-1"></i> Edit Profile
+                            </a>
+                            <a href="{{ url_for('auth.change_password') }}" class="btn btn-light btn-sm">
+                                <i class="fas fa-key me-1"></i> Change Password
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Profile Picture Column -->
+                        <div class="col-md-4 text-center">
+                            <div class="mb-4">
+                                {% if current_user.profile_picture %}
+                                    <img src="{{ url_for('static', filename='uploads/' + current_user.profile_picture) }}" 
+                                         class="img-thumbnail rounded-circle" 
+                                         style="width:150px; height:150px; object-fit:cover;"
+                                         alt="Profile Picture">
+                                {% else %}
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" 
+                                         style="width:150px; height:150px;">
+                                        <i class="fas fa-user fa-3x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="quick-actions">
+                                <a href="{{ url_for('user.transactions') }}" class="btn btn-outline-primary btn-sm mb-2">
+                                    <i class="fas fa-exchange-alt me-1"></i> View Transactions
+                                </a>
+                                <a href="{{ url_for('user.alerts') }}" class="btn btn-outline-info btn-sm mb-2">
+                                    <i class="fas fa-bell me-1"></i> View Alerts
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- User Details Column -->
+                        <div class="col-md-8">
+                            <div class="user-details">
+                                <div class="detail-section">
+                                    <h6 class="section-title"><i class="fas fa-id-card me-2"></i>Basic Information</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 detail-item">
+                                            <span class="detail-label">Username:</span>
+                                            <span class="detail-value">{{ current_user.username }}</span>
+                                        </div>
+                                        <div class="col-md-6 detail-item">
+                                            <span class="detail-label">Email:</span>
+                                            <span class="detail-value">{{ current_user.email }}</span>
+                                        </div>
+                                    </div>
+                                    {% if current_user.full_name %}
+                                    <div class="detail-item">
+                                        <span class="detail-label">Full Name:</span>
+                                        <span class="detail-value">{{ current_user.full_name }}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="detail-section">
+                                    <h6 class="section-title"><i class="fas fa-phone me-2"></i>Contact Information</h6>
+                                    {% if current_user.phone_number %}
+                                    <div class="detail-item">
+                                        <span class="detail-label">Phone:</span>
+                                        <span class="detail-value">{{ current_user.phone_number }}</span>
+                                    </div>
+                                    {% endif %}
+                                    {% if current_user.address %}
+                                    <div class="detail-item">
+                                        <span class="detail-label">Address:</span>
+                                        <span class="detail-value">{{ current_user.address }}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="detail-section">
+                                    <h6 class="section-title"><i class="fas fa-shield-alt me-2"></i>Security</h6>
+                                    {% if current_user.security_question %}
+                                    <div class="detail-item">
+                                        <span class="detail-label">Security Question:</span>
+                                        <span class="detail-value">{{ current_user.security_question }}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="detail-section">
+                                    <h6 class="section-title"><i class="fas fa-info-circle me-2"></i>Account Status</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 detail-item">
+                                            <span class="detail-label">Status:</span>
+                                            <span class="badge bg-{% if current_user.is_active %}success{% else %}danger{% endif %}">
+                                                {% if current_user.is_active %}Active{% else %}Inactive{% endif %}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-6 detail-item">
+                                            <span class="detail-label">Member Since:</span>
+                                            <span class="detail-value">{{ current_user.created_at.strftime('%b %d, %Y') }}</span>
+                                        </div>
+                                        <div class="col-12 detail-item">
+                                            <span class="detail-label">Last Login:</span>
+                                            <span class="detail-value">
+                                                {% if current_user.last_login %}
+                                                    {{ current_user.last_login.strftime('%b %d, %Y %I:%M %p') }}
+                                                {% else %}
+                                                    Never logged in
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('user.dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+                        </a>
+                        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+{% endblock %}

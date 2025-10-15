@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Transaction Analysis - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="mb-3">Analyze Transaction</h1>
+            <p class="text-muted">
+                Check the security of a UPI transaction before you proceed
+            </p>
+        </div>
+    </div>
+    
+    <!-- Transaction Analysis Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Enter Transaction Details</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('transactions.analyze_transaction') }}">
+                {{ form.hidden_tag() }}
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="recipient_upi" class="form-label">{{ form.recipient.label }}</label>
+                        {{ form.recipient(class="form-control", placeholder="e.g. name@upi") }}
+                        {% if form.recipient.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.recipient.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="amount" class="form-label">{{ form.amount.label }}</label>
+                        {{ form.amount(class="form-control", placeholder="Enter amount") }}
+                        {% if form.amount.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.amount.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="transaction_type" class="form-label">{{ form.type.label }}</label>
+                        {{ form.type(class="form-select") }}
+                        {% if form.type.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.type.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i> This will analyze your transaction for potential fraud risks using our machine learning model.
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

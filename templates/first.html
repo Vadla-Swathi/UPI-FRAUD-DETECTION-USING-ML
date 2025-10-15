@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="background: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=2286') no-repeat center center fixed; background-size: cover; min-height: 100vh;">
+    <div style="background-color: rgba(255, 255, 255, 0.9); padding: 2rem; border-radius: 0.5rem;">
+        <div class="row text-center mb-5">
+            <div class="col">
+                <h1 class="display-4 text-gradient">UPI Fraud Shield</h1>
+                <p class="lead text-muted">
+                    Protect your UPI transactions with our advanced fraud detection system
+                </p>
+                {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg mx-2">Get Started</a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg mx-2">User Login</a>
+                    <a href="{{ url_for('auth.admin_login') }}" class="btn btn-outline-warning btn-lg mx-2">Admin Login</a>
+                {% else %}
+                    <a href="{{ url_for('user.dashboard') }}" class="btn btn-primary btn-lg mx-2">Go to Dashboard</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Real-time Protection</h5>
+                        <p class="card-text">Our AI-powered system analyzes transactions instantly to detect potential fraud.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Detailed Analytics</h5>
+                        <p class="card-text">Get insights into your transaction patterns and risk factors with comprehensive reports.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">User Security</h5>
+                        <p class="card-text">Secure your account with strong authentication and password management.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

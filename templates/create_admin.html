@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Create Admin - UPI Fraud Shield{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="background: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=2286') no-repeat center center fixed; background-size: cover; min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card" style="background-color: rgba(255, 255, 255, 0.95);">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h5 class="card-title mb-0">Create New Admin</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('admin.create_admin') }}">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">User Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter user email" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Grant Admin Privileges</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center mt-3" style="color: white;">
+                <p>Return to <a href="{{ url_for('admin.dashboard') }}" style="color: #ffffff; text-decoration: underline;">Admin Dashboard</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
