@@ -19,7 +19,7 @@ The project helps financial systems and users minimize risks in digital payments
 | **Machine Learning** | TensorFlow, Pandas, NumPy |
 | **Database** | MySQL |
 | **Visualization** | Chart.js |
-| **Server** | XAMPP / Localhost |
+| **Server** |  Localhost |
 
 ---
 
